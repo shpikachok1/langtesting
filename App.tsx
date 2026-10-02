@@ -3,18 +3,21 @@ import { useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { getCourse } from './src/content';
 import { polishRatio, useProgress } from './src/progress';
+import { useReview } from './src/review';
 import { ChatScreen } from './src/screens/ChatScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { LessonScreen } from './src/screens/LessonScreen';
+import { ReviewScreen } from './src/screens/ReviewScreen';
 import { colors } from './src/theme';
 import type { Lesson } from './src/types';
 
-type Screen = { name: 'home' } | { name: 'lesson'; lesson: Lesson } | { name: 'chat' };
+type Screen = { name: 'home' } | { name: 'lesson'; lesson: Lesson } | { name: 'chat' } | { name: 'review' };
 
 const course = getCourse('pl');
 
 export default function App() {
   const { progress, loaded, completeLesson } = useProgress();
+  const review = useReview();
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const home = () => setScreen({ name: 'home' });
 
@@ -40,6 +43,8 @@ export default function App() {
           progress={progress}
           onOpenLesson={(lesson) => setScreen({ name: 'lesson', lesson })}
           onOpenChat={() => setScreen({ name: 'chat' })}
+          onOpenReview={() => setScreen({ name: 'review' })}
+          dueCount={review.due.length}
         />
       )}
       {screen.name === 'lesson' && (
@@ -50,9 +55,13 @@ export default function App() {
           onExit={home}
           onFinish={(xp) => {
             completeLesson(screen.lesson.id, xp);
+            review.addWords(screen.lesson.words);
             home();
           }}
         />
+      )}
+      {screen.name === 'review' && (
+        <ReviewScreen cards={review.due} ttsLocale={course.ttsLocale} onGrade={review.grade} onExit={home} />
       )}
       {screen.name === 'chat' && (
         <ChatScreen

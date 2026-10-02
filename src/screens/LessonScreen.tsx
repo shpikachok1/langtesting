@@ -3,7 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button } from '../components/Button';
 import { say } from '../speech';
 import { colors } from '../theme';
-import type { Exercise, Lesson } from '../types';
+import type { Exercise, Lesson, ReadingText } from '../types';
 
 type Props = {
   lesson: Lesson;
@@ -55,7 +55,36 @@ export function LessonScreen({ lesson, ttsLocale, onFinish, onExit }: Props) {
       <View style={styles.root}>
         <TopBar progress={0} hearts={hearts} onExit={onExit} />
         <ScrollView contentContainerStyle={styles.body}>
-          <Text style={styles.title}>Новые слова</Text>
+          {lesson.theory?.map((block) => (
+            <View key={block.title} style={styles.theory}>
+              <Text style={styles.theoryTitle}>{block.title}</Text>
+              <Text style={styles.theoryText}>{block.text}</Text>
+              {block.table && (
+                <View style={styles.table}>
+                  {block.table.map((row, r) => (
+                    <View key={r} style={styles.tableRow}>
+                      {row.map((cell, c) => (
+                        <Text key={c} style={[styles.tableCell, c > 0 && styles.tablePl]}>
+                          {cell}
+                        </Text>
+                      ))}
+                    </View>
+                  ))}
+                </View>
+              )}
+              {block.examples?.map((ex) => (
+                <Pressable key={ex.pl} onPress={() => say(ex.pl, ttsLocale)}>
+                  <Text style={styles.example}>
+                    🔊 <Text style={styles.examplePl}>{ex.pl}</Text> — {ex.ru}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          ))}
+
+          {lesson.reading && <ReadingView text={lesson.reading} ttsLocale={ttsLocale} />}
+
+          {lesson.words.length > 0 && <Text style={styles.title}>Новые слова</Text>}
           {lesson.words.map((w) => (
             <Pressable key={w.pl} style={styles.wordCard} onPress={() => say(w.pl, ttsLocale)}>
               <Text style={styles.wordPl}>🔊 {w.pl}</Text>
@@ -116,6 +145,33 @@ export function LessonScreen({ lesson, ttsLocale, onFinish, onExit }: Props) {
           <Button title="ДАЛЕЕ" color={verdict ? colors.good : colors.bad} onPress={next} />
         )}
       </View>
+    </View>
+  );
+}
+
+function ReadingView({ text, ttsLocale }: { text: ReadingText; ttsLocale: string }) {
+  const [open, setOpen] = useState<number | null>(null);
+  return (
+    <View style={styles.theory}>
+      <View style={styles.readingHeader}>
+        <Text style={styles.theoryTitle}>📖 {text.title}</Text>
+        <Pressable onPress={() => say(text.sentences.map((s) => s.pl).join(' '), ttsLocale)}>
+          <Text style={styles.listenAll}>🔊 весь текст</Text>
+        </Pressable>
+      </View>
+      <Text style={styles.readingTip}>Прочитай вслух. Тап по предложению — перевод и озвучка.</Text>
+      {text.sentences.map((s, i) => (
+        <Pressable
+          key={i}
+          onPress={() => {
+            setOpen(open === i ? null : i);
+            say(s.pl, ttsLocale);
+          }}
+        >
+          <Text style={styles.readingPl}>{s.pl}</Text>
+          {open === i && <Text style={styles.readingRu}>{s.ru}</Text>}
+        </Pressable>
+      ))}
     </View>
   );
 }
@@ -237,6 +293,27 @@ const styles = StyleSheet.create({
   },
   wordPl: { fontSize: 22, fontWeight: '800', color: colors.primary },
   wordRu: { fontSize: 16, color: colors.muted, marginTop: 4 },
+  theory: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: colors.border,
+  },
+  theoryTitle: { fontSize: 20, fontWeight: '900', color: colors.text, marginBottom: 8 },
+  theoryText: { fontSize: 16, lineHeight: 23, color: colors.text },
+  table: { marginTop: 12, borderRadius: 10, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
+  tableRow: { flexDirection: 'row', borderBottomWidth: 1, borderColor: colors.border },
+  tableCell: { flex: 1, padding: 8, fontSize: 16, color: colors.muted },
+  tablePl: { color: colors.primary, fontWeight: '800' },
+  example: { fontSize: 16, color: colors.text, marginTop: 10 },
+  examplePl: { color: colors.primary, fontWeight: '800' },
+  readingHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
+  listenAll: { color: colors.primary, fontWeight: '800' },
+  readingTip: { fontSize: 14, color: colors.muted, marginBottom: 12 },
+  readingPl: { fontSize: 19, lineHeight: 28, color: colors.text, marginBottom: 4 },
+  readingRu: { fontSize: 15, color: colors.muted, fontStyle: 'italic', marginBottom: 8 },
   instruction: { fontSize: 15, fontWeight: '700', color: colors.muted, marginBottom: 8 },
   prompt: { fontSize: 24, fontWeight: '800', color: colors.text, marginBottom: 24 },
   speaker: {

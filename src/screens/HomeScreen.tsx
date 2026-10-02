@@ -9,9 +9,13 @@ type Props = {
   progress: Progress;
   onOpenLesson: (lesson: Lesson) => void;
   onOpenChat: () => void;
+  onOpenReview: () => void;
+  dueCount: number;
 };
 
-export function HomeScreen({ course, progress, onOpenLesson, onOpenChat }: Props) {
+const KIND_ICON = { vocab: '★', grammar: '📐', reading: '📖' };
+
+export function HomeScreen({ course, progress, onOpenLesson, onOpenChat, onOpenReview, dueCount }: Props) {
   const order = allLessonIds(course);
   // Открыт урок, если пройден предыдущий. Следующий непройденный — «текущий».
   const isUnlocked = (id: string) => {
@@ -54,7 +58,7 @@ export function HomeScreen({ course, progress, onOpenLesson, onOpenChat }: Props
                       current && styles.nodeCurrent,
                     ]}
                   >
-                    <Text style={styles.nodeIcon}>{done ? '✓' : open ? '★' : '🔒'}</Text>
+                    <Text style={styles.nodeIcon}>{done ? '✓' : open ? KIND_ICON[lesson.kind ?? 'vocab'] : '🔒'}</Text>
                   </Pressable>
                   <Text style={styles.nodeLabel}>{lesson.title}</Text>
                 </View>
@@ -64,6 +68,12 @@ export function HomeScreen({ course, progress, onOpenLesson, onOpenChat }: Props
         ))}
       </ScrollView>
 
+      <Pressable
+        style={[styles.chatFab, styles.reviewFab, { backgroundColor: dueCount ? colors.primary : colors.locked }]}
+        onPress={onOpenReview}
+      >
+        <Text style={styles.chatFabText}>🧠 {dueCount}</Text>
+      </Pressable>
       <Pressable style={styles.chatFab} onPress={onOpenChat}>
         <Text style={styles.chatFabText}>💬 Поболтать</Text>
       </Pressable>
@@ -119,5 +129,6 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 22,
   },
+  reviewFab: { right: undefined, left: 20 },
   chatFabText: { color: '#fff', fontSize: 16, fontWeight: '800' },
 });

@@ -1,49 +1,70 @@
-// Supabase Edge Function: собеседник для режима разговора.
-// Ключ Anthropic живёт только здесь (секрет ANTHROPIC_API_KEY), в приложение он не попадает.
-// Деплой: supabase secrets set ANTHROPIC_API_KEY=... && supabase functions deploy chat
-import Anthropic from 'npm:@anthropic-ai/sdk';
+// Supabase Edge Function: мозг Збышека на Gemini API.
+// Ключ живёт только здесь (секрет GEMINI_API_KEY), в приложение он не попадает.
+// Деплой: supabase secrets set GEMINI_API_KEY=... && supabase functions deploy chat
+import { systemPrompt, type ChatRequest, type ZbyszekReply } from './prompt.ts';
 
-const client = new Anthropic({ apiKey: Deno.env.get('ANTHROPIC_API_KEY') });
+const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.8-flash';
+const API_KEY = Deno.env.get('GEMINI_API_KEY');
+const URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
-type ChatMessage = { role: 'user' | 'assistant'; content: string };
-type Body = { messages: ChatMessage[]; polishRatio: number; knownWords: string[] };
-
-function systemPrompt({ polishRatio, knownWords }: Body): string {
-  const percent = Math.round(polishRatio * 100);
-  return `Ты — Збышек, 50-летний таксист из Кракова. Ворчливый, прямолинейный, с чёрным юмором,
-можешь подколоть и грубовато ответить, как живой человек, но без оскорблений по личным качествам
-и без мата. В душе добрый и хочешь, чтобы собеседник выучил польский.
-
-Собеседник — русскоязычный студент, который учит польский с нуля.
-Сейчас примерно ${percent}% твоих слов должны быть на польском, остальное — на русском.
-При низком проценте вставляй в русскую речь отдельные польские слова и короткие фразы;
-при высоком говори почти полностью по-польски и переходи на русский, только если он явно не понял.
-Слова, которые он уже знает: ${knownWords.join(', ') || 'пока никаких'}. Опирайся на них в первую очередь.
-
-Если он пишет по-польски с ошибкой, в конце реплики коротко поправь в формате «✏️ правильно: …».
-Отвечай коротко, 1–3 предложения, как в мессенджере. Задавай вопросы, чтобы разговор шёл.`;
-}
+// Схема ответа: Gemini обязан вернуть ровно такой JSON.
+const responseSchema = {
+  type: 'object',
+  properties: {
+    reply: { type: 'string', description: 'Реплика Збышека, смесь русского и польского по заданной доле' },
+    translation: { type: 'string', description: 'Полный перевод реплики на русский' },
+    emotion: { type: 'string', enum: ['neutral', 'grumpy', 'laughing', 'angry', 'impressed', 'facepalm'] },
+    corrections: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          wrong: { type: 'string' },
+          right: { type: 'string' },
+          note: { type: 'string', description: 'Короткое объяснение по-русски' },
+        },
+        required: ['wrong', 'right', 'note'],
+      },
+    },
+  },
+  required: ['reply', 'translation', 'emotion', 'corrections'],
+};
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return new Response('POST only', { status: 405 });
-  const body = (await req.json()) as Body;
+  const body = (await req.json()) as ChatRequest;
 
-  const response = await client.beta.messages.create({
-    model: 'claude-opus-5-5',
-    max_tokens: 1024,
-    output_config: { effort: 'low' },
-    // Если запрос отклонит фильтр безопасности, API сам повторит его на запасной модели.
-    betas: ['server-side-fallback-2026-07-01'],
-    // @ts-expect-error строковая форма fallbacks может отсутствовать в типах SDK
-    fallbacks: 'default',
-    system: systemPrompt(body),
-    messages: body.messages.slice(-20),
+  const res = await fetch(URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': API_KEY ?? '' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt(body) }] },
+      contents: body.messages.slice(-20).map((m) => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      })),
+      generationConfig: { responseMimeType: 'application/json', responseSchema, temperature: 1 },
+      // Збышек матерится по задумке, поэтому фильтр грубости ослаблен до «только жёсткое».
+      safetySettings: [{ category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_ONLY_HIGH' }],
+    }),
   });
 
-  const reply = response.content
-    .filter((b) => b.type === 'text')
-    .map((b) => (b as { text: string }).text)
-    .join('');
+  if (!res.ok) {
+    console.error('Gemini error', res.status, await res.text());
+    return Response.json({ error: 'llm_failed' }, { status: 502 });
+  }
 
-  return Response.json({ reply: reply || 'Hmm… (Збышек задумался)' });
+  const data = await res.json();
+  const text: string | undefined = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  try {
+    return Response.json(JSON.parse(text ?? '') as ZbyszekReply);
+  } catch {
+    const fallback: ZbyszekReply = {
+      reply: 'Kurwa, задумался. Повтори-ка.',
+      translation: 'Блин, задумался. Повтори-ка.',
+      emotion: 'facepalm',
+      corrections: [],
+    };
+    return Response.json(fallback);
+  }
 });

@@ -3,7 +3,23 @@ import { FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, 
 import { say } from '../speech';
 import { colors } from '../theme';
 
-type Msg = { role: 'user' | 'assistant'; content: string };
+type Correction = { wrong: string; right: string; note: string };
+type Msg = {
+  role: 'user' | 'assistant';
+  content: string;
+  translation?: string;
+  emotion?: string;
+  corrections?: Correction[];
+};
+
+const FACES: Record<string, string> = {
+  neutral: '🚕',
+  grumpy: '😒',
+  laughing: '🤣',
+  angry: '🤬',
+  impressed: '😮',
+  facepalm: '🤦',
+};
 
 type Props = {
   polishRatio: number;
@@ -21,6 +37,8 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
   ]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
+  const [face, setFace] = useState('neutral');
+  const [shownTranslation, setShownTranslation] = useState<number | null>(null);
   const list = useRef<FlatList<Msg>>(null);
 
   const send = async () => {
@@ -31,17 +49,30 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
     setInput('');
     setBusy(true);
     try {
-      const reply = CHAT_URL
-        ? await fetch(CHAT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            // Первую реплику Збышека не отправляем: история для API должна начинаться с пользователя.
-            body: JSON.stringify({ messages: history.slice(1), polishRatio, knownWords }),
-          })
-            .then((r) => r.json())
-            .then((d) => d.reply as string)
-        : 'Ну и? Сервер не подключён, так что я пока молчу. (Нужно задать EXPO_PUBLIC_CHAT_URL)';
-      setMessages((m) => [...m, { role: 'assistant', content: reply }]);
+      if (!CHAT_URL) {
+        setMessages((m) => [
+          ...m,
+          { role: 'assistant', content: 'Ну и? Сервер не подключён, так что я пока молчу. (Нужно задать EXPO_PUBLIC_CHAT_URL)' },
+        ]);
+        return;
+      }
+      const res = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Первую реплику Збышека не отправляем: история для модели должна начинаться с пользователя.
+        body: JSON.stringify({
+          messages: history.slice(1).map(({ role, content }) => ({ role, content })),
+          polishRatio,
+          knownWords,
+        }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      setFace(data.emotion ?? 'neutral');
+      setMessages((m) => [
+        ...m,
+        { role: 'assistant', content: data.reply, translation: data.translation, emotion: data.emotion, corrections: data.corrections },
+      ]);
     } catch {
       setMessages((m) => [...m, { role: 'assistant', content: 'Kurczę, связь пропала. Попробуй ещё раз.' }]);
     } finally {
@@ -55,10 +86,10 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
         <Pressable onPress={onExit} hitSlop={12}>
           <Text style={styles.back}>‹</Text>
         </Pressable>
-        <Text style={styles.avatar}>🚕</Text>
+        <Text style={styles.avatar}>{FACES[face] ?? FACES.neutral}</Text>
         <View>
           <Text style={styles.name}>Zbyszek</Text>
-          <Text style={styles.meta}>польский в речи: {Math.round(polishRatio * 100)}%</Text>
+          <Text style={styles.meta}>польский в речи: {Math.round(polishRatio * 100)}% · тап по сообщению — перевод</Text>
         </View>
       </View>
 
@@ -68,13 +99,28 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
         keyExtractor={(_, i) => String(i)}
         contentContainerStyle={{ padding: 16, gap: 10 }}
         onContentSizeChange={() => list.current?.scrollToEnd()}
-        renderItem={({ item }) => (
-          <Pressable
-            onLongPress={() => item.role === 'assistant' && say(item.content, ttsLocale)}
-            style={[styles.bubble, item.role === 'user' ? styles.mine : styles.theirs]}
-          >
-            <Text style={[styles.bubbleText, item.role === 'user' && { color: '#fff' }]}>{item.content}</Text>
-          </Pressable>
+        renderItem={({ item, index }) => (
+          <View>
+            <Pressable
+              onPress={() => item.translation && setShownTranslation(shownTranslation === index ? null : index)}
+              onLongPress={() => item.role === 'assistant' && say(item.content, ttsLocale)}
+              style={[styles.bubble, item.role === 'user' ? styles.mine : styles.theirs]}
+            >
+              <Text style={[styles.bubbleText, item.role === 'user' && { color: '#fff' }]}>{item.content}</Text>
+              {shownTranslation === index && <Text style={styles.translation}>{item.translation}</Text>}
+            </Pressable>
+            {item.corrections && item.corrections.length > 0 && (
+              <View style={styles.corrections}>
+                {item.corrections.map((c, i) => (
+                  <Text key={i} style={styles.correctionText}>
+                    ✏️ <Text style={styles.wrong}>{c.wrong}</Text> → <Text style={styles.right}>{c.right}</Text>
+                    {'\n'}
+                    <Text style={styles.note}>{c.note}</Text>
+                  </Text>
+                ))}
+              </View>
+            )}
+          </View>
         )}
       />
       {busy && <Text style={styles.typing}>Zbyszek пишет…</Text>}
@@ -117,6 +163,20 @@ const styles = StyleSheet.create({
   mine: { alignSelf: 'flex-end', backgroundColor: colors.primary },
   theirs: { alignSelf: 'flex-start', backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border },
   bubbleText: { fontSize: 16, color: colors.text },
+  translation: { marginTop: 6, fontSize: 14, color: colors.muted, fontStyle: 'italic' },
+  corrections: {
+    alignSelf: 'flex-start',
+    maxWidth: '85%',
+    marginTop: 6,
+    backgroundColor: '#FFF4D6',
+    borderRadius: 12,
+    padding: 10,
+    gap: 6,
+  },
+  correctionText: { fontSize: 14, color: colors.text },
+  wrong: { color: colors.bad, textDecorationLine: 'line-through' },
+  right: { color: colors.good, fontWeight: '800' },
+  note: { color: colors.muted, fontSize: 13 },
   typing: { marginLeft: 20, marginBottom: 6, color: colors.muted, fontStyle: 'italic' },
   inputRow: { flexDirection: 'row', padding: 12, paddingBottom: 32, gap: 8 },
   input: {

@@ -31,9 +31,30 @@ export type ListenExercise = {
 
 export type Exercise = ChoiceExercise | BuildExercise | ListenExercise;
 
+/** Блок теории для урока грамматики. */
+export type TheoryBlock = {
+  title: string;
+  text: string;
+  /** Таблица-пример, например спряжение: [["ja", "jestem"], ["ty", "jesteś"]]. */
+  table?: string[][];
+  examples?: { pl: string; ru: string }[];
+};
+
+/** Текст для урока чтения: каждое предложение с переводом по тапу. */
+export type ReadingText = {
+  title: string;
+  sentences: { pl: string; ru: string }[];
+};
+
+export type LessonKind = 'vocab' | 'grammar' | 'reading';
+
 export type Lesson = {
   id: string;
   title: string;
+  /** По умолчанию 'vocab'. Определяет, что показывается перед упражнениями. */
+  kind?: LessonKind;
+  theory?: TheoryBlock[];
+  reading?: ReadingText;
   /** Новые слова урока: показываются перед упражнениями и идут в словарь. */
   words: { pl: string; ru: string; hint?: string }[];
   exercises: Exercise[];

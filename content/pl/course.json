@@ -13,35 +13,177 @@
           "id": "pl-u1-l1",
           "title": "Приветствия",
           "words": [
-            { "pl": "cześć", "ru": "привет / пока", "hint": "чещьчь" },
-            { "pl": "dzień dobry", "ru": "добрый день", "hint": "джень добры" },
-            { "pl": "do widzenia", "ru": "до свидания", "hint": "до видзеня" },
-            { "pl": "dobranoc", "ru": "спокойной ночи" }
+            {
+              "pl": "cześć",
+              "ru": "привет / пока",
+              "hint": "чещьчь"
+            },
+            {
+              "pl": "dzień dobry",
+              "ru": "добрый день",
+              "hint": "джень добры"
+            },
+            {
+              "pl": "do widzenia",
+              "ru": "до свидания",
+              "hint": "до видзеня"
+            },
+            {
+              "pl": "dobranoc",
+              "ru": "спокойной ночи"
+            }
           ],
           "exercises": [
-            { "type": "choice", "prompt": "Как сказать «привет»?", "options": ["cześć", "dziękuję", "nie"], "answer": 0, "speak": "cześć" },
-            { "type": "listen", "speak": "dzień dobry", "options": ["спокойной ночи", "добрый день", "до свидания"], "answer": 1 },
-            { "type": "choice", "prompt": "«do widzenia» — это…", "options": ["доброе утро", "до свидания", "спасибо"], "answer": 1, "speak": "do widzenia" },
-            { "type": "build", "prompt": "Добрый день!", "bank": ["dobry", "cześć", "dzień", "noc"], "answer": ["dzień", "dobry"], "speak": "dzień dobry" },
-            { "type": "listen", "speak": "dobranoc", "options": ["спокойной ночи", "привет", "добрый день"], "answer": 0 }
+            {
+              "type": "choice",
+              "prompt": "Как сказать «привет»?",
+              "options": [
+                "cześć",
+                "dziękuję",
+                "nie"
+              ],
+              "answer": 0,
+              "speak": "cześć"
+            },
+            {
+              "type": "listen",
+              "speak": "dzień dobry",
+              "options": [
+                "спокойной ночи",
+                "добрый день",
+                "до свидания"
+              ],
+              "answer": 1
+            },
+            {
+              "type": "choice",
+              "prompt": "«do widzenia» — это…",
+              "options": [
+                "доброе утро",
+                "до свидания",
+                "спасибо"
+              ],
+              "answer": 1,
+              "speak": "do widzenia"
+            },
+            {
+              "type": "build",
+              "prompt": "Добрый день!",
+              "bank": [
+                "dobry",
+                "cześć",
+                "dzień",
+                "noc"
+              ],
+              "answer": [
+                "dzień",
+                "dobry"
+              ],
+              "speak": "dzień dobry"
+            },
+            {
+              "type": "listen",
+              "speak": "dobranoc",
+              "options": [
+                "спокойной ночи",
+                "привет",
+                "добрый день"
+              ],
+              "answer": 0
+            }
           ]
         },
         {
           "id": "pl-u1-l2",
           "title": "Вежливость",
           "words": [
-            { "pl": "dziękuję", "ru": "спасибо", "hint": "дженкуе" },
-            { "pl": "proszę", "ru": "пожалуйста", "hint": "прошэ" },
-            { "pl": "przepraszam", "ru": "извините", "hint": "пшепрашам" },
-            { "pl": "tak", "ru": "да" },
-            { "pl": "nie", "ru": "нет" }
+            {
+              "pl": "dziękuję",
+              "ru": "спасибо",
+              "hint": "дженкуе"
+            },
+            {
+              "pl": "proszę",
+              "ru": "пожалуйста",
+              "hint": "прошэ"
+            },
+            {
+              "pl": "przepraszam",
+              "ru": "извините",
+              "hint": "пшепрашам"
+            },
+            {
+              "pl": "tak",
+              "ru": "да"
+            },
+            {
+              "pl": "nie",
+              "ru": "нет"
+            }
           ],
           "exercises": [
-            { "type": "choice", "prompt": "Как сказать «спасибо»?", "options": ["proszę", "dziękuję", "tak"], "answer": 1, "speak": "dziękuję" },
-            { "type": "listen", "speak": "przepraszam", "options": ["извините", "пожалуйста", "привет"], "answer": 0 },
-            { "type": "choice", "prompt": "«nie» — это…", "options": ["да", "нет", "ну"], "answer": 1, "speak": "nie" },
-            { "type": "build", "prompt": "Да, спасибо.", "bank": ["dziękuję", "nie", "tak", "proszę"], "answer": ["tak", "dziękuję"], "speak": "tak, dziękuję" },
-            { "type": "build", "prompt": "Нет, извините.", "bank": ["przepraszam", "tak", "nie", "cześć"], "answer": ["nie", "przepraszam"], "speak": "nie, przepraszam" }
+            {
+              "type": "choice",
+              "prompt": "Как сказать «спасибо»?",
+              "options": [
+                "proszę",
+                "dziękuję",
+                "tak"
+              ],
+              "answer": 1,
+              "speak": "dziękuję"
+            },
+            {
+              "type": "listen",
+              "speak": "przepraszam",
+              "options": [
+                "извините",
+                "пожалуйста",
+                "привет"
+              ],
+              "answer": 0
+            },
+            {
+              "type": "choice",
+              "prompt": "«nie» — это…",
+              "options": [
+                "да",
+                "нет",
+                "ну"
+              ],
+              "answer": 1,
+              "speak": "nie"
+            },
+            {
+              "type": "build",
+              "prompt": "Да, спасибо.",
+              "bank": [
+                "dziękuję",
+                "nie",
+                "tak",
+                "proszę"
+              ],
+              "answer": [
+                "tak",
+                "dziękuję"
+              ],
+              "speak": "tak, dziękuję"
+            },
+            {
+              "type": "build",
+              "prompt": "Нет, извините.",
+              "bank": [
+                "przepraszam",
+                "tak",
+                "nie",
+                "cześć"
+              ],
+              "answer": [
+                "nie",
+                "przepraszam"
+              ],
+              "speak": "nie, przepraszam"
+            }
           ]
         }
       ]
@@ -55,31 +197,269 @@
           "id": "pl-u2-l1",
           "title": "Кто я",
           "words": [
-            { "pl": "jestem", "ru": "я есть / я" },
-            { "pl": "mam na imię", "ru": "меня зовут", "hint": "мам на имье" },
-            { "pl": "studentem", "ru": "студентом (студент)" },
-            { "pl": "jak masz na imię?", "ru": "как тебя зовут?" }
+            {
+              "pl": "jestem",
+              "ru": "я есть / я"
+            },
+            {
+              "pl": "mam na imię",
+              "ru": "меня зовут",
+              "hint": "мам на имье"
+            },
+            {
+              "pl": "studentem",
+              "ru": "студентом (студент)"
+            },
+            {
+              "pl": "jak masz na imię?",
+              "ru": "как тебя зовут?"
+            }
           ],
           "exercises": [
-            { "type": "choice", "prompt": "Как сказать «меня зовут…»?", "options": ["jestem", "mam na imię", "do widzenia"], "answer": 1, "speak": "mam na imię" },
-            { "type": "build", "prompt": "Я студент.", "bank": ["studentem", "mam", "jestem", "tak"], "answer": ["jestem", "studentem"], "speak": "jestem studentem" },
-            { "type": "listen", "speak": "jak masz na imię?", "options": ["как дела?", "как тебя зовут?", "ты студент?"], "answer": 1 },
-            { "type": "build", "prompt": "Привет, меня зовут Никита.", "bank": ["imię", "cześć", "na", "mam", "Nikita", "jestem"], "answer": ["cześć", "mam", "na", "imię", "Nikita"], "speak": "cześć, mam na imię Nikita" }
+            {
+              "type": "choice",
+              "prompt": "Как сказать «меня зовут…»?",
+              "options": [
+                "jestem",
+                "mam na imię",
+                "do widzenia"
+              ],
+              "answer": 1,
+              "speak": "mam na imię"
+            },
+            {
+              "type": "build",
+              "prompt": "Я студент.",
+              "bank": [
+                "studentem",
+                "mam",
+                "jestem",
+                "tak"
+              ],
+              "answer": [
+                "jestem",
+                "studentem"
+              ],
+              "speak": "jestem studentem"
+            },
+            {
+              "type": "listen",
+              "speak": "jak masz na imię?",
+              "options": [
+                "как дела?",
+                "как тебя зовут?",
+                "ты студент?"
+              ],
+              "answer": 1
+            },
+            {
+              "type": "build",
+              "prompt": "Привет, меня зовут Никита.",
+              "bank": [
+                "imię",
+                "cześć",
+                "na",
+                "mam",
+                "Nikita",
+                "jestem"
+              ],
+              "answer": [
+                "cześć",
+                "mam",
+                "na",
+                "imię",
+                "Nikita"
+              ],
+              "speak": "cześć, mam na imię Nikita"
+            }
+          ]
+        },
+        {
+          "id": "pl-u2-g1",
+          "title": "Глагол być",
+          "kind": "grammar",
+          "theory": [
+            {
+              "title": "być — быть",
+              "text": "В польском, в отличие от русского, «быть» не пропускается: нельзя сказать «я студент», надо «я есть студент». Глагол меняется по лицам, поэтому местоимение часто опускают: «Jestem Nikita» — «Я Никита».",
+              "table": [
+                [
+                  "я",
+                  "ja jestem"
+                ],
+                [
+                  "ты",
+                  "ty jesteś"
+                ],
+                [
+                  "он / она",
+                  "on / ona jest"
+                ],
+                [
+                  "мы",
+                  "my jesteśmy"
+                ],
+                [
+                  "вы",
+                  "wy jesteście"
+                ],
+                [
+                  "они",
+                  "oni / one są"
+                ]
+              ],
+              "examples": [
+                {
+                  "pl": "Jestem studentem.",
+                  "ru": "Я студент."
+                },
+                {
+                  "pl": "Ona jest tutaj.",
+                  "ru": "Она здесь."
+                },
+                {
+                  "pl": "Jesteś z Rosji?",
+                  "ru": "Ты из России?"
+                }
+              ]
+            }
+          ],
+          "words": [
+            {
+              "pl": "tutaj",
+              "ru": "здесь",
+              "hint": "тутай"
+            },
+            {
+              "pl": "z Rosji",
+              "ru": "из России",
+              "hint": "з роши"
+            }
+          ],
+          "exercises": [
+            {
+              "type": "choice",
+              "prompt": "Ty ___ studentem?",
+              "options": [
+                "jestem",
+                "jesteś",
+                "jest"
+              ],
+              "answer": 1,
+              "speak": "ty jesteś studentem?"
+            },
+            {
+              "type": "choice",
+              "prompt": "Oni ___ tutaj.",
+              "options": [
+                "są",
+                "jest",
+                "jesteście"
+              ],
+              "answer": 0,
+              "speak": "oni są tutaj"
+            },
+            {
+              "type": "choice",
+              "prompt": "My ___ w Krakowie.",
+              "options": [
+                "jesteście",
+                "jesteśmy",
+                "jestem"
+              ],
+              "answer": 1,
+              "speak": "my jesteśmy w Krakowie"
+            },
+            {
+              "type": "build",
+              "prompt": "Она здесь.",
+              "bank": [
+                "jest",
+                "ona",
+                "są",
+                "tutaj"
+              ],
+              "answer": [
+                "ona",
+                "jest",
+                "tutaj"
+              ],
+              "speak": "ona jest tutaj"
+            },
+            {
+              "type": "listen",
+              "speak": "jesteś z Rosji?",
+              "options": [
+                "ты из России?",
+                "я из России",
+                "вы из России?"
+              ],
+              "answer": 0
+            }
           ]
         },
         {
           "id": "pl-u2-l2",
           "title": "Как дела",
           "words": [
-            { "pl": "co słychać?", "ru": "как дела? (что слышно?)", "hint": "цо сўыхачь" },
-            { "pl": "dobrze", "ru": "хорошо", "hint": "добже" },
-            { "pl": "źle", "ru": "плохо", "hint": "жьле" },
-            { "pl": "a ty?", "ru": "а ты?" }
+            {
+              "pl": "co słychać?",
+              "ru": "как дела? (что слышно?)",
+              "hint": "цо сўыхачь"
+            },
+            {
+              "pl": "dobrze",
+              "ru": "хорошо",
+              "hint": "добже"
+            },
+            {
+              "pl": "źle",
+              "ru": "плохо",
+              "hint": "жьле"
+            },
+            {
+              "pl": "a ty?",
+              "ru": "а ты?"
+            }
           ],
           "exercises": [
-            { "type": "listen", "speak": "co słychać?", "options": ["как дела?", "где ты?", "что это?"], "answer": 0 },
-            { "type": "choice", "prompt": "Как сказать «хорошо»?", "options": ["źle", "dobrze", "dobry"], "answer": 1, "speak": "dobrze" },
-            { "type": "build", "prompt": "Хорошо, а ты?", "bank": ["ty", "źle", "a", "dobrze"], "answer": ["dobrze", "a", "ty"], "speak": "dobrze, a ty?" }
+            {
+              "type": "listen",
+              "speak": "co słychać?",
+              "options": [
+                "как дела?",
+                "где ты?",
+                "что это?"
+              ],
+              "answer": 0
+            },
+            {
+              "type": "choice",
+              "prompt": "Как сказать «хорошо»?",
+              "options": [
+                "źle",
+                "dobrze",
+                "dobry"
+              ],
+              "answer": 1,
+              "speak": "dobrze"
+            },
+            {
+              "type": "build",
+              "prompt": "Хорошо, а ты?",
+              "bank": [
+                "ty",
+                "źle",
+                "a",
+                "dobrze"
+              ],
+              "answer": [
+                "dobrze",
+                "a",
+                "ty"
+              ],
+              "speak": "dobrze, a ty?"
+            }
           ]
         }
       ]
@@ -93,16 +473,273 @@
           "id": "pl-u3-l1",
           "title": "Заказ",
           "words": [
-            { "pl": "kawa", "ru": "кофе" },
-            { "pl": "herbata", "ru": "чай" },
-            { "pl": "woda", "ru": "вода" },
-            { "pl": "poproszę", "ru": "дайте, пожалуйста (я попрошу)", "hint": "попрошэ" }
+            {
+              "pl": "kawa",
+              "ru": "кофе"
+            },
+            {
+              "pl": "herbata",
+              "ru": "чай"
+            },
+            {
+              "pl": "woda",
+              "ru": "вода"
+            },
+            {
+              "pl": "poproszę",
+              "ru": "дайте, пожалуйста (я попрошу)",
+              "hint": "попрошэ"
+            }
           ],
           "exercises": [
-            { "type": "choice", "prompt": "«herbata» — это…", "options": ["кофе", "чай", "вода"], "answer": 1, "speak": "herbata" },
-            { "type": "listen", "speak": "woda", "options": ["вода", "водка", "кофе"], "answer": 0 },
-            { "type": "build", "prompt": "Кофе, пожалуйста.", "bank": ["kawa", "poproszę", "kawę", "woda"], "answer": ["poproszę", "kawę"], "speak": "poproszę kawę" },
-            { "type": "build", "prompt": "Чай, пожалуйста. Спасибо!", "bank": ["herbatę", "dziękuję", "poproszę", "tak"], "answer": ["poproszę", "herbatę", "dziękuję"], "speak": "poproszę herbatę, dziękuję" }
+            {
+              "type": "choice",
+              "prompt": "«herbata» — это…",
+              "options": [
+                "кофе",
+                "чай",
+                "вода"
+              ],
+              "answer": 1,
+              "speak": "herbata"
+            },
+            {
+              "type": "listen",
+              "speak": "woda",
+              "options": [
+                "вода",
+                "водка",
+                "кофе"
+              ],
+              "answer": 0
+            },
+            {
+              "type": "build",
+              "prompt": "Кофе, пожалуйста.",
+              "bank": [
+                "kawa",
+                "poproszę",
+                "kawę",
+                "woda"
+              ],
+              "answer": [
+                "poproszę",
+                "kawę"
+              ],
+              "speak": "poproszę kawę"
+            },
+            {
+              "type": "build",
+              "prompt": "Чай, пожалуйста. Спасибо!",
+              "bank": [
+                "herbatę",
+                "dziękuję",
+                "poproszę",
+                "tak"
+              ],
+              "answer": [
+                "poproszę",
+                "herbatę",
+                "dziękuję"
+              ],
+              "speak": "poproszę herbatę, dziękuję"
+            }
+          ]
+        },
+        {
+          "id": "pl-u3-r1",
+          "title": "В кафе",
+          "kind": "reading",
+          "reading": {
+            "title": "W kawiarni",
+            "sentences": [
+              {
+                "pl": "Jestem w kawiarni w Krakowie.",
+                "ru": "Я в кафе в Кракове."
+              },
+              {
+                "pl": "Kelner pyta: co dla pana?",
+                "ru": "Официант спрашивает: что для вас?"
+              },
+              {
+                "pl": "Poproszę kawę i wodę.",
+                "ru": "Кофе и воду, пожалуйста."
+              },
+              {
+                "pl": "Kawa jest dobra, ale droga.",
+                "ru": "Кофе хороший, но дорогой."
+              },
+              {
+                "pl": "Dziękuję i do widzenia!",
+                "ru": "Спасибо и до свидания!"
+              }
+            ]
+          },
+          "words": [
+            {
+              "pl": "kawiarnia",
+              "ru": "кафе, кофейня",
+              "hint": "кавярня"
+            },
+            {
+              "pl": "kelner",
+              "ru": "официант"
+            },
+            {
+              "pl": "ale",
+              "ru": "но"
+            },
+            {
+              "pl": "drogi / droga",
+              "ru": "дорогой / дорогая"
+            }
+          ],
+          "exercises": [
+            {
+              "type": "choice",
+              "prompt": "Где он находится?",
+              "options": [
+                "в Варшаве",
+                "в кафе в Кракове",
+                "дома"
+              ],
+              "answer": 1
+            },
+            {
+              "type": "choice",
+              "prompt": "Что он заказывает?",
+              "options": [
+                "чай и воду",
+                "кофе и воду",
+                "только кофе"
+              ],
+              "answer": 1
+            },
+            {
+              "type": "choice",
+              "prompt": "Какой там кофе?",
+              "options": [
+                "хороший, но дорогой",
+                "плохой и дешёвый",
+                "холодный"
+              ],
+              "answer": 0
+            },
+            {
+              "type": "build",
+              "prompt": "Кофе хороший, но дорогой.",
+              "bank": [
+                "dobra",
+                "kawa",
+                "ale",
+                "droga",
+                "jest",
+                "herbata"
+              ],
+              "answer": [
+                "kawa",
+                "jest",
+                "dobra",
+                "ale",
+                "droga"
+              ],
+              "speak": "kawa jest dobra, ale droga"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pl-u4",
+      "title": "Карта поляка",
+      "emoji": "🪪",
+      "lessons": [
+        {
+          "id": "pl-u4-l1",
+          "title": "Мои корни",
+          "words": [
+            {
+              "pl": "Polska",
+              "ru": "Польша"
+            },
+            {
+              "pl": "Polak / Polka",
+              "ru": "поляк / полька"
+            },
+            {
+              "pl": "mój dziadek",
+              "ru": "мой дедушка",
+              "hint": "муй джядэк"
+            },
+            {
+              "pl": "był Polakiem",
+              "ru": "был поляком",
+              "hint": "быў полякем"
+            },
+            {
+              "pl": "chcę mieszkać w Polsce",
+              "ru": "я хочу жить в Польше",
+              "hint": "хцэ мешкачь в польсцэ"
+            }
+          ],
+          "exercises": [
+            {
+              "type": "choice",
+              "prompt": "Как сказать «Польша»?",
+              "options": [
+                "Polak",
+                "Polska",
+                "Polsce"
+              ],
+              "answer": 1,
+              "speak": "Polska"
+            },
+            {
+              "type": "listen",
+              "speak": "mój dziadek był Polakiem",
+              "options": [
+                "мой дедушка был поляком",
+                "мой папа поляк",
+                "моя бабушка полька"
+              ],
+              "answer": 0
+            },
+            {
+              "type": "build",
+              "prompt": "Я хочу жить в Польше.",
+              "bank": [
+                "w",
+                "mieszkać",
+                "Polska",
+                "chcę",
+                "Polsce"
+              ],
+              "answer": [
+                "chcę",
+                "mieszkać",
+                "w",
+                "Polsce"
+              ],
+              "speak": "chcę mieszkać w Polsce"
+            },
+            {
+              "type": "build",
+              "prompt": "Мой дедушка был поляком.",
+              "bank": [
+                "dziadek",
+                "Polakiem",
+                "był",
+                "mój",
+                "jest"
+              ],
+              "answer": [
+                "mój",
+                "dziadek",
+                "był",
+                "Polakiem"
+              ],
+              "speak": "mój dziadek był Polakiem"
+            }
           ]
         }
       ]
