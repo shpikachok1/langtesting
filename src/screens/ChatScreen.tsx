@@ -30,6 +30,8 @@ type Props = {
 
 // Адрес Edge Function из supabase/functions/chat. Задаётся в .env как EXPO_PUBLIC_CHAT_URL.
 const CHAT_URL = process.env.EXPO_PUBLIC_CHAT_URL;
+// Публичный anon-ключ Supabase: без него функция отвечает 401. Это не секрет, ключ Gemini лежит на сервере.
+const ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 
 export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props) {
   const [messages, setMessages] = useState<Msg[]>([
@@ -58,7 +60,7 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
       }
       const res = await fetch(CHAT_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON_KEY}` },
         // Первую реплику Збышека не отправляем: история для модели должна начинаться с пользователя.
         body: JSON.stringify({
           messages: history.slice(1).map(({ role, content }) => ({ role, content })),
