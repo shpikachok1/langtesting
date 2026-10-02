@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { callFunction, FACES, serverConfigured, type Correction, type ZbyszekReply } from '../api';
 import { say } from '../speech';
 import { colors } from '../theme';
 
-type Correction = { wrong: string; right: string; note: string };
 type Msg = {
   role: 'user' | 'assistant';
   content: string;
@@ -12,28 +12,16 @@ type Msg = {
   corrections?: Correction[];
 };
 
-const FACES: Record<string, string> = {
-  neutral: '🚕',
-  grumpy: '😒',
-  laughing: '🤣',
-  angry: '🤬',
-  impressed: '😮',
-  facepalm: '🤦',
-};
 
 type Props = {
   polishRatio: number;
   knownWords: string[];
   ttsLocale: string;
   onExit: () => void;
+  onCall: () => void;
 };
 
-// Адрес Edge Function из supabase/functions/chat. Задаётся в .env как EXPO_PUBLIC_CHAT_URL.
-const CHAT_URL = process.env.EXPO_PUBLIC_CHAT_URL;
-// Публичный anon-ключ Supabase: без него функция отвечает 401. Это не секрет, ключ Gemini лежит на сервере.
-const ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
-
-export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props) {
+export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit, onCall }: Props) {
   const [messages, setMessages] = useState<Msg[]>([
     { role: 'assistant', content: 'No, cześć. Я Збышек. Чего надо? Давай, скажи что-нибудь, не стесняйся.' },
   ]);
@@ -51,25 +39,19 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
     setInput('');
     setBusy(true);
     try {
-      if (!CHAT_URL) {
+      if (!serverConfigured) {
         setMessages((m) => [
           ...m,
           { role: 'assistant', content: 'Ну и? Сервер не подключён, так что я пока молчу. (Нужно задать EXPO_PUBLIC_CHAT_URL)' },
         ]);
         return;
       }
-      const res = await fetch(CHAT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${ANON_KEY}` },
-        // Первую реплику Збышека не отправляем: история для модели должна начинаться с пользователя.
-        body: JSON.stringify({
-          messages: history.slice(1).map(({ role, content }) => ({ role, content })),
-          polishRatio,
-          knownWords,
-        }),
+      // Первую реплику Збышека не отправляем: история для модели должна начинаться с пользователя.
+      const data = await callFunction<ZbyszekReply>('chat', {
+        messages: history.slice(1).map(({ role, content }) => ({ role, content })),
+        polishRatio,
+        knownWords,
       });
-      if (!res.ok) throw new Error(String(res.status));
-      const data = await res.json();
       setFace(data.emotion ?? 'neutral');
       setMessages((m) => [
         ...m,
@@ -93,6 +75,9 @@ export function ChatScreen({ polishRatio, knownWords, ttsLocale, onExit }: Props
           <Text style={styles.name}>Zbyszek</Text>
           <Text style={styles.meta}>польский в речи: {Math.round(polishRatio * 100)}% · тап по сообщению — перевод</Text>
         </View>
+        <Pressable onPress={onCall} hitSlop={12} style={styles.callButton}>
+          <Text style={{ fontSize: 26 }}>📞</Text>
+        </Pressable>
       </View>
 
       <FlatList
@@ -157,6 +142,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: colors.border,
   },
+  callButton: { marginLeft: 'auto' },
   back: { fontSize: 34, color: colors.muted, marginTop: -4 },
   avatar: { fontSize: 34 },
   name: { fontSize: 18, fontWeight: '800', color: colors.text },

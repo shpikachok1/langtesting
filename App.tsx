@@ -4,6 +4,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { getCourse } from './src/content';
 import { polishRatio, useProgress } from './src/progress';
 import { useReview } from './src/review';
+import { CallScreen } from './src/screens/CallScreen';
 import { ChatScreen } from './src/screens/ChatScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { LessonScreen } from './src/screens/LessonScreen';
@@ -11,7 +12,7 @@ import { ReviewScreen } from './src/screens/ReviewScreen';
 import { colors } from './src/theme';
 import type { Lesson } from './src/types';
 
-type Screen = { name: 'home' } | { name: 'lesson'; lesson: Lesson } | { name: 'chat' } | { name: 'review' };
+type Screen = { name: 'home' } | { name: 'lesson'; lesson: Lesson } | { name: 'chat' } | { name: 'review' } | { name: 'call' };
 
 const course = getCourse('pl');
 
@@ -44,6 +45,7 @@ export default function App() {
           onOpenLesson={(lesson) => setScreen({ name: 'lesson', lesson })}
           onOpenChat={() => setScreen({ name: 'chat' })}
           onOpenReview={() => setScreen({ name: 'review' })}
+          onOpenCall={() => setScreen({ name: 'call' })}
           dueCount={review.due.length}
         />
       )}
@@ -69,7 +71,11 @@ export default function App() {
           knownWords={knownWords}
           ttsLocale={course.ttsLocale}
           onExit={home}
+          onCall={() => setScreen({ name: 'call' })}
         />
+      )}
+      {screen.name === 'call' && (
+        <CallScreen polishRatio={polishRatio(progress)} knownWords={knownWords} onExit={home} />
       )}
     </>
   );

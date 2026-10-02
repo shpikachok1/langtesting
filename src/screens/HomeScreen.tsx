@@ -10,12 +10,13 @@ type Props = {
   onOpenLesson: (lesson: Lesson) => void;
   onOpenChat: () => void;
   onOpenReview: () => void;
+  onOpenCall: () => void;
   dueCount: number;
 };
 
 const KIND_ICON = { vocab: '★', grammar: '📐', reading: '📖' };
 
-export function HomeScreen({ course, progress, onOpenLesson, onOpenChat, onOpenReview, dueCount }: Props) {
+export function HomeScreen({ course, progress, onOpenLesson, onOpenChat, onOpenReview, onOpenCall, dueCount }: Props) {
   const order = allLessonIds(course);
   // Открыт урок, если пройден предыдущий. Следующий непройденный — «текущий».
   const isUnlocked = (id: string) => {
@@ -74,6 +75,9 @@ export function HomeScreen({ course, progress, onOpenLesson, onOpenChat, onOpenR
       >
         <Text style={styles.chatFabText}>🧠 {dueCount}</Text>
       </Pressable>
+      <Pressable style={[styles.chatFab, styles.callFab]} onPress={onOpenCall}>
+        <Text style={styles.chatFabText}>📞 Позвонить</Text>
+      </Pressable>
       <Pressable style={styles.chatFab} onPress={onOpenChat}>
         <Text style={styles.chatFabText}>💬 Поболтать</Text>
       </Pressable>
@@ -129,6 +133,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 22,
   },
+  callFab: { bottom: 100, backgroundColor: colors.good },
   reviewFab: { right: undefined, left: 20 },
   chatFabText: { color: '#fff', fontSize: 16, fontWeight: '800' },
 });

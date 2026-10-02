@@ -18,8 +18,10 @@ npx supabase login                         # откроется браузер, 
 npx supabase init                          # один раз; на вопросы про VS Code / Deno жми Enter
 npx supabase link --project-ref <ref>
 npx supabase secrets set GEMINI_API_KEY=<твой ключ Gemini>
-npx supabase functions deploy chat
+npx supabase functions deploy chat call speak
 ```
+
+`chat` — текстовый чат, `call` — голосовой звонок (слушает твою запись), `speak` — голос Збышека.
 
 ## 3. Настроить приложение
 
