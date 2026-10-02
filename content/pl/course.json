@@ -1,0 +1,111 @@
+{
+  "language": "pl",
+  "ttsLocale": "pl-PL",
+  "title": "Польский",
+  "flag": "🇵🇱",
+  "units": [
+    {
+      "id": "pl-u1",
+      "title": "Привет, Польша",
+      "emoji": "👋",
+      "lessons": [
+        {
+          "id": "pl-u1-l1",
+          "title": "Приветствия",
+          "words": [
+            { "pl": "cześć", "ru": "привет / пока", "hint": "чещьчь" },
+            { "pl": "dzień dobry", "ru": "добрый день", "hint": "джень добры" },
+            { "pl": "do widzenia", "ru": "до свидания", "hint": "до видзеня" },
+            { "pl": "dobranoc", "ru": "спокойной ночи" }
+          ],
+          "exercises": [
+            { "type": "choice", "prompt": "Как сказать «привет»?", "options": ["cześć", "dziękuję", "nie"], "answer": 0, "speak": "cześć" },
+            { "type": "listen", "speak": "dzień dobry", "options": ["спокойной ночи", "добрый день", "до свидания"], "answer": 1 },
+            { "type": "choice", "prompt": "«do widzenia» — это…", "options": ["доброе утро", "до свидания", "спасибо"], "answer": 1, "speak": "do widzenia" },
+            { "type": "build", "prompt": "Добрый день!", "bank": ["dobry", "cześć", "dzień", "noc"], "answer": ["dzień", "dobry"], "speak": "dzień dobry" },
+            { "type": "listen", "speak": "dobranoc", "options": ["спокойной ночи", "привет", "добрый день"], "answer": 0 }
+          ]
+        },
+        {
+          "id": "pl-u1-l2",
+          "title": "Вежливость",
+          "words": [
+            { "pl": "dziękuję", "ru": "спасибо", "hint": "дженкуе" },
+            { "pl": "proszę", "ru": "пожалуйста", "hint": "прошэ" },
+            { "pl": "przepraszam", "ru": "извините", "hint": "пшепрашам" },
+            { "pl": "tak", "ru": "да" },
+            { "pl": "nie", "ru": "нет" }
+          ],
+          "exercises": [
+            { "type": "choice", "prompt": "Как сказать «спасибо»?", "options": ["proszę", "dziękuję", "tak"], "answer": 1, "speak": "dziękuję" },
+            { "type": "listen", "speak": "przepraszam", "options": ["извините", "пожалуйста", "привет"], "answer": 0 },
+            { "type": "choice", "prompt": "«nie» — это…", "options": ["да", "нет", "ну"], "answer": 1, "speak": "nie" },
+            { "type": "build", "prompt": "Да, спасибо.", "bank": ["dziękuję", "nie", "tak", "proszę"], "answer": ["tak", "dziękuję"], "speak": "tak, dziękuję" },
+            { "type": "build", "prompt": "Нет, извините.", "bank": ["przepraszam", "tak", "nie", "cześć"], "answer": ["nie", "przepraszam"], "speak": "nie, przepraszam" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pl-u2",
+      "title": "Знакомство",
+      "emoji": "🙋",
+      "lessons": [
+        {
+          "id": "pl-u2-l1",
+          "title": "Кто я",
+          "words": [
+            { "pl": "jestem", "ru": "я есть / я" },
+            { "pl": "mam na imię", "ru": "меня зовут", "hint": "мам на имье" },
+            { "pl": "studentem", "ru": "студентом (студент)" },
+            { "pl": "jak masz na imię?", "ru": "как тебя зовут?" }
+          ],
+          "exercises": [
+            { "type": "choice", "prompt": "Как сказать «меня зовут…»?", "options": ["jestem", "mam na imię", "do widzenia"], "answer": 1, "speak": "mam na imię" },
+            { "type": "build", "prompt": "Я студент.", "bank": ["studentem", "mam", "jestem", "tak"], "answer": ["jestem", "studentem"], "speak": "jestem studentem" },
+            { "type": "listen", "speak": "jak masz na imię?", "options": ["как дела?", "как тебя зовут?", "ты студент?"], "answer": 1 },
+            { "type": "build", "prompt": "Привет, меня зовут Никита.", "bank": ["imię", "cześć", "na", "mam", "Nikita", "jestem"], "answer": ["cześć", "mam", "na", "imię", "Nikita"], "speak": "cześć, mam na imię Nikita" }
+          ]
+        },
+        {
+          "id": "pl-u2-l2",
+          "title": "Как дела",
+          "words": [
+            { "pl": "co słychać?", "ru": "как дела? (что слышно?)", "hint": "цо сўыхачь" },
+            { "pl": "dobrze", "ru": "хорошо", "hint": "добже" },
+            { "pl": "źle", "ru": "плохо", "hint": "жьле" },
+            { "pl": "a ty?", "ru": "а ты?" }
+          ],
+          "exercises": [
+            { "type": "listen", "speak": "co słychać?", "options": ["как дела?", "где ты?", "что это?"], "answer": 0 },
+            { "type": "choice", "prompt": "Как сказать «хорошо»?", "options": ["źle", "dobrze", "dobry"], "answer": 1, "speak": "dobrze" },
+            { "type": "build", "prompt": "Хорошо, а ты?", "bank": ["ty", "źle", "a", "dobrze"], "answer": ["dobrze", "a", "ty"], "speak": "dobrze, a ty?" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pl-u3",
+      "title": "В кафе",
+      "emoji": "☕",
+      "lessons": [
+        {
+          "id": "pl-u3-l1",
+          "title": "Заказ",
+          "words": [
+            { "pl": "kawa", "ru": "кофе" },
+            { "pl": "herbata", "ru": "чай" },
+            { "pl": "woda", "ru": "вода" },
+            { "pl": "poproszę", "ru": "дайте, пожалуйста (я попрошу)", "hint": "попрошэ" }
+          ],
+          "exercises": [
+            { "type": "choice", "prompt": "«herbata» — это…", "options": ["кофе", "чай", "вода"], "answer": 1, "speak": "herbata" },
+            { "type": "listen", "speak": "woda", "options": ["вода", "водка", "кофе"], "answer": 0 },
+            { "type": "build", "prompt": "Кофе, пожалуйста.", "bank": ["kawa", "poproszę", "kawę", "woda"], "answer": ["poproszę", "kawę"], "speak": "poproszę kawę" },
+            { "type": "build", "prompt": "Чай, пожалуйста. Спасибо!", "bank": ["herbatę", "dziękuję", "poproszę", "tak"], "answer": ["poproszę", "herbatę", "dziękuję"], "speak": "poproszę herbatę, dziękuję" }
+          ]
+        }
+      ]
+    }
+  ]
+}
