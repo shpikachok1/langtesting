@@ -31,10 +31,15 @@ export async function generateJson<T>(system: string, contents: Content[], schem
   return JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text ?? '');
 }
 
-/** Озвучить текст. Возвращает WAV (24 кГц, моно) в base64. */
+/**
+ * Озвучить текст. Возвращает WAV (24 кГц, моно) в base64.
+ * Подсказка о манере речи идёт отдельным блоком «режиссёрских заметок», а зачитывается только
+ * то, что после TRANSCRIPT. Если склеить их в одну строку, модель читает подсказку вслух.
+ */
 export async function speak(text: string, style: string): Promise<string> {
+  const prompt = `# AUDIO PROFILE: Zbyszek\n## DIRECTOR'S NOTES\n${style}.\n## TRANSCRIPT\n${text}`;
   const data = await generate(TTS_MODEL, {
-    contents: [{ role: 'user', parts: [{ text: `${style}: ${text}` }] }],
+    contents: [{ role: 'user', parts: [{ text: prompt }] }],
     generationConfig: {
       responseModalities: ['AUDIO'],
       speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: TTS_VOICE } } },
